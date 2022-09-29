@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from products.models import Product
 
 # Register
 class CustomAccountManger(BaseUserManager):
@@ -40,6 +41,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     nickname = models.CharField(max_length=45, unique=True)
     create_dt = models.DateTimeField(default=timezone.now, blank=True, null=True)
     phone = models.CharField(max_length=45, blank=True, null=True) 
+
+    # like_products = models.ManyToManyField('Product', blank=True, related_name='like_users')
 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
