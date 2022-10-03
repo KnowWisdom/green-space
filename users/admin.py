@@ -6,12 +6,12 @@ from django.db import models
 
 class UserAdminConfig(UserAdmin):
     ordering = ('-create_dt',)
-    list_display = ('user_id', 'username', 'nickname', 'gender' ,'is_active', 'is_staff')
+    list_display = ('user_id', 'username', 'nickname', 'open', 'gender' ,'is_active', 'is_staff')
 
     fieldsets = (
         (None, {'fields': ('nickname', 'username', 'password', 'create_dt', 'last_login')}),
         ('Permissions', {'fields': ('is_staff', 'is_active',)}),
-        ('Personal', {'fields': ('gender', 'age', 'phone', 'point')}),
+        ('Personal', {'fields': ('open', 'gender', 'age', 'phone', 'point')}),
     )
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 20, 'cols': 60})},

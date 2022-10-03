@@ -54,8 +54,8 @@ class RefreshTokenSerializer(serializers.Serializer):
             self.fail('bad_token')
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['nickname', 'username', 'gender', 'phone', 'point', 'open']
+        fields = ['nickname', 'username', 'age', 'gender', 'phone', 'point', 'open']

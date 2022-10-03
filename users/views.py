@@ -11,7 +11,7 @@ from .serializers import (
     CustomUserSerializer,
     RefreshTokenSerializer,
     UserListSerializer,
-    UserSerializer,
+    UserProfileSerializer
 )
 
 from .models import CustomUser
@@ -87,7 +87,7 @@ class SignOutUserView(APIView):
 
         return Response(
                 {
-                   "message": "logout success" 
+                    "message": "logout success" 
                 }, status=status.HTTP_204_NO_CONTENT)
 
 
@@ -98,14 +98,25 @@ class DeleteUserView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class UserDetailView(APIView):
-    permission_classes = [ IsAuthenticated ]
+class ProfileView(APIView):
+    def get(self, request, *args, **kwargs):
+        user = CustomUser.objects.get(user_id=request.user.user_id)
+        return Response(
+            {
+                "user_id": user.user_id,
+                "username": user.username,
+                "age" : user.age,
+                "phone": user.phone,
+                "point" : user.point,
+                "open" : user.open,
+                "gender" : user.gender
+            }
+        )
 
-    # 사용자 정보 조회
-    def get(self, request):
-        return Response(UserSerializer(request.user).data)
-
-    def put(self, request):
-        user = CustomUser.objects.get(user)
-        serializer = UserSerializer(request.user).data
-        # if serializer.is_valid():
+    def patch(self, request):
+        user = CustomUser.objects.get(user_id=request.user.user_id)
+        serializer = UserProfileSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)

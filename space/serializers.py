@@ -1,7 +1,6 @@
 from dataclasses import field
 from .models import Item, Buy
 from rest_framework import serializers
-from users.serializers import UserSerializer
 
 # Item
 class ItemSerializer(serializers.ModelSerializer):
