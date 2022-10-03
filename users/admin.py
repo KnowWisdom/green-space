@@ -11,7 +11,7 @@ class UserAdminConfig(UserAdmin):
     fieldsets = (
         (None, {'fields': ('nickname', 'username', 'password', 'create_dt', 'last_login')}),
         ('Permissions', {'fields': ('is_staff', 'is_active',)}),
-        ('Personal', {'fields': ('phone', 'bank', 'bank_account','profile_img',)}),
+        ('Personal', {'fields': ('gender', 'age', 'phone', 'point')}),
     )
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 20, 'cols': 60})},

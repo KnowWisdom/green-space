@@ -22,8 +22,11 @@ class CustomUserSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         nickname = attrs['nickname']
         password = attrs['password']
+        username = attrs['username']
         if CustomUser.objects.filter(nickname=nickname).exists():
             raise serializers.ValidationError("이미 존재하는 닉네임입니다.")
+        if CustomUser.objects.filter(username=username).exists():
+            raise serializers.ValidationError("이미 존재하는 유저네임입니다.")
         validate_password(password)
 
         return attrs
@@ -31,7 +34,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['nickname', 'username', 'profile_img']
+        fields = ['nickname', 'username']
 
 class RefreshTokenSerializer(serializers.Serializer):
     refresh = serializers.CharField()
@@ -49,3 +52,10 @@ class RefreshTokenSerializer(serializers.Serializer):
             RefreshToken(self.token).blacklist()
         except TokenError:
             self.fail('bad_token')
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = ['nickname', 'username', 'gender', 'phone', 'point', 'open']

@@ -11,6 +11,7 @@ from .serializers import (
     CustomUserSerializer,
     RefreshTokenSerializer,
     UserListSerializer,
+    UserSerializer,
 )
 
 class CustomUserView(APIView):
@@ -87,5 +88,9 @@ class SignOutUserView(APIView):
                    "message": "logout success" 
                 }, status=status.HTTP_204_NO_CONTENT)
 
+class UserDetailView(APIView):
+    permission_classes = [ IsAuthenticated ]
 
-
+    # 사용자 정보 조회
+    def get(self, request):
+        return Response(UserSerializer(request.user).data)

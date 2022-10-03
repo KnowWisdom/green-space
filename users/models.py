@@ -36,6 +36,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     GENDER_CHOICES = (
         ('M', 'Male'),
         ('F', 'Female'),
+        ('N', 'None'),
     )
     
     user_id = models.BigAutoField(
@@ -48,9 +49,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     nickname = models.CharField(max_length=45, unique=True) # 아이디
     create_dt = models.DateTimeField(default=timezone.now, blank=True, null=True) 
     phone = models.CharField(max_length=45, blank=True, null=True) 
-    gender = models.CharField(max_length = 200, choices=GENDER_CHOICES, default='M')
+    gender = models.CharField(max_length = 200, choices=GENDER_CHOICES, default='N')
+    age = models.IntegerField(null=True, blank=True)
 
     open = models.BooleanField(default=True)
+
+    point = models.IntegerField(default=0)
 
     # like_products = models.ManyToManyField('Product', blank=True, related_name='like_users')
 

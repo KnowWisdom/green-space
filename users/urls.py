@@ -5,12 +5,14 @@ from .views import (
     CustomUserView,
     SignInUserView,
     SignOutUserView,
+    UserDetailView
 )
 
 app_name = 'users'
 
 urlpatterns = [
     path('', UserListView.as_view(), name="user-list"),
+    path('profile/', UserDetailView.as_view()),
     path('signup/', CustomUserView.as_view(), name="user-create"),
     path('signin/', SignInUserView.as_view(), name="user-detail"),
     path('signin/refresh/', TokenRefreshView.as_view(), name='token-refresh'),

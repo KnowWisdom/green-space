@@ -59,12 +59,18 @@ INSTALLED_APPS = [
 
     # drf
     'rest_framework',
+
     # cors
     'corsheaders',
+
     # token
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+
+    # extension 
+    'django_extensions',
+    
     # app
     'users.apps.UsersConfig',
     'products.apps.ProductsConfig',

@@ -11,29 +11,10 @@ from rest_framework import generics
 from rest_framework import mixins
 from rest_framework import status
 from django.http import Http404
+from rest_framework import viewsets
 
 # Product 목록 보기
-class ProductList(mixins.ListModelMixin,
-                    mixins.CreateModelMixin,
-                    generics.GenericAPIView):
-
+class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-
-    # list 전송
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    
-# Product 세부사항 보기
-class ProductDetail(mixins.RetrieveModelMixin,
-                    mixins.UpdateModelMixin,
-                    mixins.DestroyModelMixin,
-                    generics.GenericAPIView):
-
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
 
