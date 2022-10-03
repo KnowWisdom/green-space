@@ -6,7 +6,7 @@ from django.db import models
 
 class UserAdminConfig(UserAdmin):
     ordering = ('-create_dt',)
-    list_display = ('user_id', 'username', 'nickname', 'is_active', 'is_staff')
+    list_display = ('user_id', 'username', 'nickname', 'gender' ,'is_active', 'is_staff')
 
     fieldsets = (
         (None, {'fields': ('nickname', 'username', 'password', 'create_dt', 'last_login')}),

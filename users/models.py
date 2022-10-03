@@ -1,9 +1,10 @@
+from random import choices
 from tabnanny import verbose
+from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-from products.models import Product
 
 # Register
 class CustomAccountManger(BaseUserManager):
@@ -31,16 +32,25 @@ class CustomAccountManger(BaseUserManager):
         user.save()
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+    )
+    
     user_id = models.BigAutoField(
         primary_key=True,
         unique=True,
         editable=False,
         verbose_name='user_id',
     )
-    username = models.CharField(max_length=45, )
-    nickname = models.CharField(max_length=45, unique=True)
-    create_dt = models.DateTimeField(default=timezone.now, blank=True, null=True)
+    username = models.CharField(max_length=45, ) # 닉네임
+    nickname = models.CharField(max_length=45, unique=True) # 아이디
+    create_dt = models.DateTimeField(default=timezone.now, blank=True, null=True) 
     phone = models.CharField(max_length=45, blank=True, null=True) 
+    gender = models.CharField(max_length = 200, choices=GENDER_CHOICES, default='M')
+
+    open = models.BooleanField(default=True)
 
     # like_products = models.ManyToManyField('Product', blank=True, related_name='like_users')
 
@@ -60,3 +70,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
+
+
+class Follow(models.Model):
+    class Meta:
+        unique_together = ('user', 'following')
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    following = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='following')
