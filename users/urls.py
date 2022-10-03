@@ -5,6 +5,7 @@ from .views import (
     CustomUserView,
     SignInUserView,
     SignOutUserView,
+    DeleteUserView,
     UserDetailView
 )
 
@@ -16,5 +17,6 @@ urlpatterns = [
     path('signup/', CustomUserView.as_view(), name="user-create"),
     path('signin/', SignInUserView.as_view(), name="user-detail"),
     path('signin/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
-    path('signout/', SignOutUserView.as_view(), name="logout")
+    path('signout/', SignOutUserView.as_view(), name="logout"),
+    path("delete/", DeleteUserView.as_view(), name="delete"),
 ]

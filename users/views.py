@@ -14,6 +14,8 @@ from .serializers import (
     UserSerializer,
 )
 
+from .models import CustomUser
+
 class CustomUserView(APIView):
     permission_classes = [ AllowAny ]
 
@@ -88,9 +90,22 @@ class SignOutUserView(APIView):
                    "message": "logout success" 
                 }, status=status.HTTP_204_NO_CONTENT)
 
+
+class DeleteUserView(APIView):
+    def delete(self, request):
+        User = CustomUser.objects.get(user_id=request.user.user_id)
+        User.delete()
+        return Response(status=status.HTTP_200_OK)
+
+
 class UserDetailView(APIView):
     permission_classes = [ IsAuthenticated ]
 
     # 사용자 정보 조회
     def get(self, request):
         return Response(UserSerializer(request.user).data)
+
+    def put(self, request):
+        user = CustomUser.objects.get(user)
+        serializer = UserSerializer(request.user).data
+        # if serializer.is_valid():
