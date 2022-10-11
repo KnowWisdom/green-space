@@ -1,3 +1,5 @@
+from contextlib import nullcontext
+from email.policy import default
 from django.db import models
 from users.models import CustomUser
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -7,38 +9,30 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # 녹색 공간 꾸밀 아이템
 class Item(models.Model):
 
-    item_id = models.BigAutoField(
+    CATEGORY_CHOICES = (
+        ('item1', 'item1'),
+        ('item2', 'item2'),
+        ('badge', 'badge'),
+    )
+
+    id = models.BigAutoField(
         primary_key=True, 
         unique=True, 
         verbose_name="item_id"
     )
 
+    name = models.CharField(max_length = 200, null=True)
+
     image = models.ImageField(upload_to="items", null=False)
 
     point = models.IntegerField(default=10)
 
-    item_category = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(4)])
+    category = models.CharField(max_length = 200, choices=CATEGORY_CHOICES, default='N')
 
-# 녹색 공간
-class Space(models.Model):
-    space_id = models.BigAutoField(
-        primary_key=True, 
-        unique=True, 
-        verbose_name="space_id"
-    )
+    def __str__(self) :
+        return self.name
 
-    owner = models.ForeignKey(
-        CustomUser, 
-        related_name="owner_user", 
-        on_delete=models.CASCADE, 
-        null=False, 
-        db_column="owner"
-    )
-    
-    def __str(self):
-        return self.owner
-
-
+# 구매한 아이템과 배지
 class Buy(models.Model):
 
     user = models.ForeignKey(
@@ -50,4 +44,5 @@ class Buy(models.Model):
         Item,
         on_delete=models.CASCADE,
     )
+
     pick = models.BooleanField(default=False)

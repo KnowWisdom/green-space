@@ -31,6 +31,8 @@ class CustomAccountManger(BaseUserManager):
         user.set_password(password)
         user.save()
 
+
+# 사용자
 class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     GENDER_CHOICES = (
@@ -75,7 +77,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.username
 
 
-
+# 팔로우
 class Follow(models.Model):
     class Meta:
         unique_together = ('user', 'following')

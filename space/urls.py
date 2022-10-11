@@ -1,7 +1,8 @@
-from django.urls import path
+from django.urls import path, include
 
 from space.models import Item, Buy
 from .views import *
+from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
 
 app_name = 'space'
@@ -21,10 +22,10 @@ item_detail = ItemViewSet.as_view({
 
 
 urlpatterns = [
-    path('items/', item_list),
-    path('items/<int:pk>/', item_detail),
-    path('buy/', BuyView.as_view()),
-    # path('buy/<int:pk>/', buy_detail)
+    
+    path('buy/', BuyList.as_view()),
+    path('buy/<int:pk>/', BuyDetail.as_view()),
+
 ]
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+# urlpatterns = format_suffix_patterns(urlpatterns)
