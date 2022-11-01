@@ -1,11 +1,11 @@
 from django.urls import path, include
 
-from space.models import Item, Buy
+from shop.models import Item, Buy
 from .views import *
 from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
 
-app_name = 'space'
+app_name = 'shop'
 
 # Item 목록 보여주기
 item_list = ItemViewSet.as_view({
@@ -22,9 +22,9 @@ item_detail = ItemViewSet.as_view({
 
 
 urlpatterns = [
-    
+    path('items/', item_list),
+    path('items/<int:pk>/', item_detail),
     path('buy/', BuyList.as_view()),
-    path('buy/<int:pk>/', BuyDetail.as_view()),
 
 ]
 

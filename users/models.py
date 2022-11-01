@@ -34,12 +34,6 @@ class CustomAccountManger(BaseUserManager):
 
 # 사용자
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-
-    GENDER_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('N', 'None'),
-    )
     
     user_id = models.BigAutoField(
         primary_key=True,
@@ -49,13 +43,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     username = models.CharField(max_length=45, ) # 닉네임
     nickname = models.CharField(max_length=45, unique=True) # 아이디
-    create_dt = models.DateTimeField(default=timezone.now, blank=True, null=True) 
-    phone = models.CharField(max_length=45, blank=True, null=True) 
-    gender = models.CharField(max_length = 200, choices=GENDER_CHOICES, default='N')
-    age = models.IntegerField(null=True, blank=True)
-
+    create_dt = models.DateTimeField(default=timezone.now, blank=True, null=True)
     open = models.BooleanField(default=True)
-
     point = models.IntegerField(default=0)
 
     # like_products = models.ManyToManyField('Product', blank=True, related_name='like_users')
@@ -79,8 +68,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 # 팔로우
 class Follow(models.Model):
-    class Meta:
-        unique_together = ('user', 'following')
+    from_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='to_user', null=True)
+    to_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='from_user', null=True)
 
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    following = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='following')
+    class Meta :
+        db_table = 'follow'

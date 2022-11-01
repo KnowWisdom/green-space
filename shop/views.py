@@ -17,6 +17,8 @@ from rest_framework.views import APIView
 class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
+    
+    
 
 
 # =========================================================== #
@@ -50,19 +52,11 @@ class BuyList(APIView):
                 }
                 return Response(data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class BuyDetail(APIView):
-    # 보유하고 있는 아이템의 세부사항
-    def get(self, request, pk, format=None):
-        item=Item.objects.get(id=pk)
-
-        buy = Buy.objects.get(user=request.user.user_id, item=item)
-        serializer = BuyDetailSerializer(buy)
-        return Response(serializer.data)
+        
     # 보유 중인 아이템 되팔기
-    def delete(self, request, pk, format=None):
-        item=Item.objects.get(id=pk)    
+    def delete(self, request, format=None):
+        item = Item.objects.get(name=request.data['name'])
+        # item=Item.objects.get(id=pk)    
 
         try:
             buy = Buy.objects.get(user=request.user.user_id, item=item)
@@ -70,9 +64,6 @@ class BuyDetail(APIView):
             return Response({
                 "message" : "해당 아이템을 소유하고 있지 않습니다."
             }, status=status.HTTP_400_BAD_REQUEST)
-        
-
-
         if request.user.point < 10 :
             return Response({
                 "message": "포인트가 적습니다."
@@ -85,3 +76,5 @@ class BuyDetail(APIView):
             return Response({
                 "message" : "포인트를 " + str(item.point/2) +" 만큼 획득하고 삭제 성공"
             },status=status.HTTP_204_NO_CONTENT)
+
+

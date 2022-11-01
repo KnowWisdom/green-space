@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
+from .models import Follow
 
 CustomUser = get_user_model()
 
@@ -55,7 +56,20 @@ class RefreshTokenSerializer(serializers.Serializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = CustomUser
-        fields = ['nickname', 'username', 'age', 'gender', 'phone', 'point', 'open']
+        fields = ['nickname', 'username', 'point', 'open']
+
+class ToUserSerializer(serializers.ModelSerializer):
+    to_user = UserProfileSerializer(())
+
+    class Meta :
+        model = Follow
+        fields = ['to_user']
+
+class FromUserSerializer(serializers.ModelSerializer):
+    from_user = UserProfileSerializer(())
+
+    class Meta :
+        model = Follow
+        fields = ['from_user']

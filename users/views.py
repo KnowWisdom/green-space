@@ -1,3 +1,6 @@
+from collections import UserList
+from os import stat
+from urllib import response
 from django.contrib.auth import authenticate
 from rest_framework import status
 from rest_framework.views import APIView
@@ -7,14 +10,9 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.generics import ListAPIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from users.models import CustomUser
-from .serializers import (
-    CustomUserSerializer,
-    RefreshTokenSerializer,
-    UserListSerializer,
-    UserProfileSerializer
-)
-
-from .models import CustomUser
+from .serializers import *
+from django.db.models import Q
+from .models import CustomUser, Follow
 
 class CustomUserView(APIView):
     permission_classes = [ AllowAny ]
@@ -33,10 +31,14 @@ class CustomUserView(APIView):
             )
         return Response(reg_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class UserListView(ListAPIView):
+class UserListView(APIView):
     permission_classes = [ IsAuthenticated ]
-    queryset = CustomUser.objects.all()
-    serializer_class = UserListSerializer
+    
+    def get(self, request, *args, **kwargs):
+        users = CustomUser.objects.filter(~Q(user_id=request.user.user_id) & ~Q(open = False))
+        serializers = UserListSerializer(users, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)        
+    
 
 
 class SignInUserView(APIView):
@@ -101,15 +103,13 @@ class DeleteUserView(APIView):
 class ProfileView(APIView):
     def get(self, request, *args, **kwargs):
         user = CustomUser.objects.get(user_id=request.user.user_id)
+            
         return Response(
             {
                 "user_id": user.user_id,
                 "username": user.username,
-                "age" : user.age,
-                "phone": user.phone,
                 "point" : user.point,
                 "open" : user.open,
-                "gender" : user.gender
             }
         )
 
@@ -118,5 +118,58 @@ class ProfileView(APIView):
         serializer = UserProfileSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(status=status.HTTP_200_OK)
+            return Response(serializer.data ,status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class FollowingView(APIView):
+    def post(self, request, *args):
+        follow_nickname = request.data["nickname"]
+
+        if not follow_nickname :
+            return Response({
+                "messmage" : "key error"
+            }, status = status.HTTP_400_BAD_REQUEST)
+
+        from_user = request.user
+        to_user = CustomUser.objects.get(nickname=follow_nickname)
+        follow = Follow.objects.filter(from_user=from_user, to_user=to_user)
+
+        if follow :
+            follow[0].delete()
+            message = 'unfollowing'
+        else :
+            Follow.objects.create(
+                from_user = from_user,
+                to_user = to_user,
+            )
+            message = 'following'
+
+        return Response({
+            "message" : message
+        }, status=status.HTTP_200_OK)
+
+class FollowingListView(APIView):
+    def get(self, request):
+        to_user = Follow.objects.filter(from_user = request.user)
+
+        if to_user.exists():
+            serializers = ToUserSerializer(to_user, many=True)
+            return Response(serializers.data, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                "message" : "해당 사용자가 팔로잉하고있는 사용자가 없음"
+            })
+
+
+
+
+class FollowedListView(APIView):
+    def get(self, request):
+        from_user = Follow.objects.filter(to_user = request.user)
+        if from_user.exists():
+            serializers = FromUserSerializer(from_user, many=True)
+            return Response(serializers.data, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                "message" : "해당 사용자를 팔로우하는 사용자가 없음"
+            })
