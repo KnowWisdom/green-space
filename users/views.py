@@ -148,6 +148,7 @@ class FollowingView(APIView):
             "message" : message
         }, status=status.HTTP_200_OK)
 
+
 class FollowingListView(APIView):
     def get(self, request):
         to_user = Follow.objects.filter(from_user = request.user)
@@ -159,8 +160,6 @@ class FollowingListView(APIView):
             return Response({
                 "message" : "해당 사용자가 팔로잉하고있는 사용자가 없음"
             })
-
-
 
 
 class FollowedListView(APIView):

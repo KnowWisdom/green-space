@@ -18,13 +18,27 @@ item_detail = ItemViewSet.as_view({
     'get' : 'retrieve',
     'put' : 'update',
     'delete' : 'destroy'
-}) 
+})
+
+badge_list = BadgeViewSet.as_view({
+    'get' : 'list',
+    'post' : 'create'
+})
+
+badge_detail = BadgeViewSet.as_view({
+    'get' : 'retrieve',
+    'put' : 'update',
+    'delete' : 'destroy'
+})
 
 
 urlpatterns = [
     path('items/', item_list),
-    path('items/<int:pk>/', item_detail),
+    path('items/<int:pk>', item_detail),
+    path('badges/', badge_list),
+    path('badges/<int:pk>', badge_detail),
     path('buy/', BuyList.as_view()),
+    path('space/', SpaceView.as_view()),
 
 ]
 

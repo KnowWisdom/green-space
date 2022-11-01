@@ -6,7 +6,7 @@ from users.models import CustomUser
 
 class Post(models.Model):
     id = models.AutoField(primary_key=True)
-    image = models.ImageField(upload_to="items", null=False)
+    image = models.ImageField(upload_to="posts", null=False)
     text = models.TextField()
     user = models.ForeignKey(
         CustomUser,
@@ -16,5 +16,3 @@ class Post(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    accepted = models.BooleanField(default=False)

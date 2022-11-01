@@ -15,14 +15,13 @@ class ItemSerializer(serializers.ModelSerializer):
 
 # Buy
 class BuyDetailSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source="user.nickname")
     item = ItemSerializer()
     
     class Meta : 
         model = Buy
-        fields = '__all__'
+        fields = ['item', 'pick']
 
 class BuySerializer(serializers.ModelSerializer):
     class Meta :
         model = Buy
-        fields = ['user', 'item']
+        fields = ['user', 'item', 'category']

@@ -10,8 +10,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Item(models.Model):
 
     CATEGORY_CHOICES = (
-        ('item1', 'item1'),
-        ('item2', 'item2'),
+        ('item', 'item'),
         ('badge', 'badge'),
     )
 
@@ -27,13 +26,18 @@ class Item(models.Model):
 
     point = models.IntegerField(default=10)
 
-    category = models.CharField(max_length = 200, choices=CATEGORY_CHOICES, default='N')
+    category = models.CharField(max_length = 200, choices=CATEGORY_CHOICES, default='item')
 
     def __str__(self) :
         return self.name
 
 # 구매한 아이템과 배지
 class Buy(models.Model):
+
+    CATEGORY_CHOICES = (
+        ('item', 'item'),
+        ('badge', 'badge'),
+    )
 
     user = models.ForeignKey(
         CustomUser, 
@@ -46,3 +50,5 @@ class Buy(models.Model):
     )
 
     pick = models.BooleanField(default=False)
+
+    category = models.CharField(max_length = 200, choices=CATEGORY_CHOICES, default='item', null=True)

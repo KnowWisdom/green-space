@@ -6,6 +6,6 @@ from .models import *
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     ordering = ('id', )
-    list_display = ('id', 'user', 'text')
+    list_display = ('id', 'user', 'text', 'image')
     
 

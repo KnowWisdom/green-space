@@ -3,6 +3,7 @@ from django.urls import path
 from products.models import Product
 from .views import ProductViewSet
 from rest_framework.urlpatterns import format_suffix_patterns
+from .views import *
 
 app_name = 'products'
 
@@ -22,6 +23,8 @@ product_detail = ProductViewSet.as_view({
 urlpatterns = [
     path('', product_list),
     path('<int:pk>/', product_detail),
+    path('mark/<int:pk>', BookmarkView.as_view()),
+    path('mark/', BookmarkListView.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
