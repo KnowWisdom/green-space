@@ -27,6 +27,6 @@ class UserAdminConfig(UserAdmin):
 @admin.register(Follow)
 class FollowAdmin(admin.ModelAdmin):
     ordering = ('id', )
-    list_display = ('to_user', 'from_user')
+    list_display = ('id', 'to_user', 'from_user')
 
 admin.site.register(CustomUser, UserAdminConfig)

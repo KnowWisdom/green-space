@@ -65,11 +65,11 @@ class ToUserSerializer(serializers.ModelSerializer):
 
     class Meta :
         model = Follow
-        fields = ['to_user']
+        fields = ['id', 'to_user']
 
 class FromUserSerializer(serializers.ModelSerializer):
     from_user = UserProfileSerializer(())
 
     class Meta :
         model = Follow
-        fields = ['from_user']
+        fields = ['id', 'from_user']
