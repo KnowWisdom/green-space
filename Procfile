@@ -1,1 +1,1 @@
-web: gunicorn green-space.wsgi --log-file -
+web: gunicorn greenspace.wsgi --log-file -
