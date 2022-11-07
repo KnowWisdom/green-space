@@ -25,7 +25,7 @@ class CustomAccountManger(BaseUserManager):
 
         user = self.model(
             nickname=nickname, username=username, 
-            password=password, phone=extra_fields.pop('phone', None),
+            password=password,
             **extra_fields
         )
         user.set_password(password)
