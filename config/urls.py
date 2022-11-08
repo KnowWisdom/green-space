@@ -17,30 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import url
+from rest_framework_swagger.views import get_swagger_view
 
-from rest_framework import permissions
-from drf_yasg import get_schema_view
-from drf_yasg import openapi
-
-schema_view = get_schema_view(
-    openapi.Info(
-        title = "GREEN SPACE",
-        default_version= "1.0.0",
-        description= "green space api",
-        terms_of_service= "https://policies.google.com/terms",
-        contact= openapi.Contact(email="21913662@yu.ac.kr"),
-        license= openapi.License(name="kimjihye"),
-    ),
-    public = True,
-    permission_classes = [permissions.AllowAny],
-)
-
+schema_view = get_swagger_view(title='GREEN SPACE API')
 
 urlpatterns = [
-    path(r'swagger(?P<format>\.json|\.yaml)', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path(r'swagger', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path(r'redoc', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc-v1'),
-    
+    url(r'^$', schema_view),
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('products/', include('products.urls')),
