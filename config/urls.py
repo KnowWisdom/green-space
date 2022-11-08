@@ -17,13 +17,21 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import url
+
+from .yasg import *
 
 urlpatterns = [
+    path('swagger<str:format>', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('docs/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('products/', include('products.urls')),
     path('shop/', include('shop.urls')),
     path('post/', include('post.urls')),
 ]
+
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
