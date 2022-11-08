@@ -7,7 +7,7 @@ from drf_yasg import openapi
 schema_url_patterns = [
     path('user/', include('users.urls')),
     path('shop/', include('shop.urls')),
-    path('product/', include('product.urls')),
+    path('product/', include('products.urls')),
     path('post/', include('post.urls')),
 ]
 
