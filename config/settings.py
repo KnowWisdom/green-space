@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 
     # drf
     'rest_framework',
-    'rest_framework_swagger',
+    'drf_yasg',
 
     # cors
     'corsheaders',
